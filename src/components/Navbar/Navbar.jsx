@@ -17,10 +17,18 @@ import toggle_light from "../../assets/navbar/night.png";
 import toggle_dark from "../../assets/navbar/day.png";
 import login from "../../assets/navbar/login-icon.png";
 
-const Navbar = () => {
+const Navbar = ({ theme, setTheme }) => {
+  const toggleTheme = () => {
+    return theme == "light" ? setTheme("dark") : setTheme("light");
+  };
+
   return (
     <div className="navbar">
-      <img src={logo_dark} alt="" className="logo" />
+      <img
+        src={theme == "light" ? logo_light : logo_dark}
+        alt=""
+        className="logo"
+      />
       <ul>
         <li>
           <a href="#">Home</a>
@@ -38,18 +46,28 @@ const Navbar = () => {
 
       <div className="src-box">
         <input type="text" placeholder="Search..." />
-        <img src={search_incon_light} alt="" />
+        <img
+          src={theme == "light" ? search_incon_light : search_incon_dark}
+          alt=""
+        />
       </div>
 
       {/* logic for the connexion */}
 
-      <Button type="button" class="btn btn-primary">
+      <Button type="button" class="btn btn-primary mr-1">
         <BiSolidLogInCircle size={24} />
       </Button>
 
       {/* dark mode */}
 
-      <img src={toggle_light} alt="Logo" className="toggle-icon" />
+      <img
+        src={theme == "light" ? toggle_light : toggle_dark}
+        alt="Logo"
+        className="toggle-icon"
+        onClick={() => {
+          toggleTheme();
+        }}
+      />
     </div>
   );
 };
