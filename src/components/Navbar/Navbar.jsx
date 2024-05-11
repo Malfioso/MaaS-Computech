@@ -54,7 +54,7 @@ const Navbar = ({ theme, setTheme }) => {
 
       {/* logic for the connexion */}
 
-      <Button type="button" class="btn btn-primary mr-1">
+      <Button type="button" className="btn btn-primary mr-1">
         <BiSolidLogInCircle size={24} />
       </Button>
 

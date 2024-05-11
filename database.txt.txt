@@ -1,0 +1,124 @@
+-- Table "Utilisateurs"
+CREATE TABLE Utilisateurs (
+    id_utilisateur INT PRIMARY KEY IDENTITY(1,1),
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    mot_de_passe VARCHAR(255) NOT NULL,
+    date_inscription DATE NOT NULL
+);
+
+-- Table "Lignes"
+CREATE TABLE Lignes (
+    id_ligne INT PRIMARY KEY IDENTITY(1,1),
+    nom_ligne VARCHAR(50) NOT NULL,
+    description TEXT
+);
+
+-- Table "Arrets"
+CREATE TABLE Arrets (
+    id_arret INT PRIMARY KEY IDENTITY(1,1),
+    nom_arret VARCHAR(100) NOT NULL,
+    adresse VARCHAR(255),
+    latitude DECIMAL(10, 8),
+    longitude DECIMAL(11, 8)
+);
+
+-- Table "Horaires"
+CREATE TABLE Horaires (
+    id_horaire INT PRIMARY KEY IDENTITY(1,1),
+    id_ligne INT NOT NULL,
+    id_arret INT NOT NULL,
+    heure_depart TIME NOT NULL,
+    heure_arrivee TIME NOT NULL,
+    jour_semaine VARCHAR(20) NOT NULL,
+    CONSTRAINT FK_Horaires_Lignes FOREIGN KEY (id_ligne) REFERENCES Lignes(id_ligne),
+    CONSTRAINT FK_Horaires_Arrets FOREIGN KEY (id_arret) REFERENCES Arrets(id_arret)
+);
+
+-- Table "Bus"
+CREATE TABLE Bus (
+    id_bus INT PRIMARY KEY IDENTITY(1,1),
+    id_ligne INT NOT NULL,
+    numero_bus VARCHAR(20) NOT NULL,
+    capacite INT,
+    en_service BIT NOT NULL DEFAULT 1,
+    CONSTRAINT FK_Bus_Lignes FOREIGN KEY (id_ligne) REFERENCES Lignes(id_ligne)
+);
+
+-- Table "Trajets"
+CREATE TABLE Trajets (
+    id_trajet INT PRIMARY KEY IDENTITY(1,1),
+    id_bus INT NOT NULL,
+    id_ligne INT NOT NULL,
+    date_trajet DATE NOT NULL,
+    heure_depart TIME NOT NULL,
+    heure_arrivee TIME NOT NULL,
+    CONSTRAINT FK_Trajets_Bus FOREIGN KEY (id_bus) REFERENCES Bus(id_bus),
+    CONSTRAINT FK_Trajets_Lignes FOREIGN KEY (id_ligne) REFERENCES Lignes(id_ligne)
+);
+
+-- Table "Billets"
+CREATE TABLE Billets (
+    id_billet INT PRIMARY KEY IDENTITY(1,1),
+    id_utilisateur INT NOT NULL,
+    id_trajet INT NOT NULL,
+    type_billet VARCHAR(50) NOT NULL,
+    prix DECIMAL(10, 2) NOT NULL,
+    date_achat DATE NOT NULL,
+    CONSTRAINT FK_Billets_Utilisateurs FOREIGN KEY (id_utilisateur) REFERENCES Utilisateurs(id_utilisateur),
+    CONSTRAINT FK_Billets_Trajets FOREIGN KEY (id_trajet) REFERENCES Trajets(id_trajet)
+);
+
+-- Table "Trafic"
+CREATE TABLE Trafic (
+    id_trafic INT PRIMARY KEY IDENTITY(1,1),
+    id_ligne INT NOT NULL,
+    date_trafic DATE NOT NULL,
+    heure_debut TIME NOT NULL,
+    heure_fin TIME NOT NULL,
+    niveau_trafic VARCHAR(20),
+    CONSTRAINT FK_Trafic_Lignes FOREIGN KEY (id_ligne) REFERENCES Lignes(id_ligne)
+);
+
+INSERT INTO Arrets (nom_arret, adresse, latitude, longitude)
+VALUES ('Galisbay', NULL, NULL, NULL);
+
+INSERT INTO Arrets (nom_arret, adresse, latitude, longitude)
+VALUES ('Marigot', NULL, NULL, NULL);
+
+INSERT INTO Arrets (nom_arret, adresse, latitude, longitude)
+VALUES ('Concordia', NULL, NULL, NULL);
+
+INSERT INTO Arrets (nom_arret, adresse, latitude, longitude)
+VALUES ('Orlean', NULL, NULL, NULL);
+
+INSERT INTO Arrets (nom_arret, adresse, latitude, longitude)
+VALUES ('Sandy', NULL, NULL, NULL);
+
+INSERT INTO Arrets (nom_arret, adresse, latitude, longitude)
+VALUES ('Case', NULL, NULL, NULL);
+
+UPDATE Arrets
+SET adresse = 'Port de Galisbay', latitude = 18.083458076800234, longitude = -63.08417007976711
+WHERE nom_arret = 'Galisbay';
+
+UPDATE Arrets
+SET latitude = 18.067452787641017, longitude = -63.082551934921995
+WHERE nom_arret = 'Marigot';
+
+UPDATE Arrets
+SET latitude = 18.066677791020346, longitude = -63.076533105820324
+WHERE nom_arret = 'Concordia';
+
+UPDATE Arrets
+SET adresse = 'Quartier d''Orléans', latitude = 18.069921257954014, longitude = -63.033585529358845
+WHERE nom_arret = 'Orlean';
+
+UPDATE Arrets
+SET latitude = 18.058830072444334, longitude = -63.09982814226614
+WHERE nom_arret = 'Sandy';
+
+UPDATE Arrets
+SET latitude = 18.100119759664345, longitude = -63.054603351328616
+WHERE nom_arret = 'Case';
