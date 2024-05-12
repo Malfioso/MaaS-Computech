@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import axios from "axios";
+import { Arret } from "../Arret";
 
 const Map = () => {
-  const [busStops, setBusStops] = useState([]);
+  const [arrets, setArrets] = useState([]);
 
   useEffect(() => {
-    fetchBusStops();
+    fetch("http://localhost:3000/api/arrets")
+      .then((response) => response.json())
+      .then((data) => setArrets(data))
+      .catch((error) =>
+        console.error("Erreur lors de la récupération des arrêts :", error)
+      );
   }, []);
-
-  const fetchBusStops = async () => {
-    try {
-      const response = await axios.get("/api/bus-stops");
-      setBusStops(response.data);
-    } catch (error) {
-      console.error("Error fetching bus stops:", error);
-    }
-  };
 
   return (
     <MapContainer
@@ -29,14 +25,16 @@ const Map = () => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {busStops.map((busStop) => (
-        <Marker
-          key={busStop.id}
-          position={[busStop.latitude, busStop.longitude]}
-        >
-          <Popup>{busStop.name}</Popup>
-        </Marker>
-      ))}
+      {Array.isArray(arrets) &&
+        arrets.map((arret) => (
+          <Arret
+            key={arret.id_arret}
+            latitude={arret.latitude}
+            longitude={arret.longitude}
+            nom={arret.nom_arret}
+            id_arret={arret.id_arret}
+          />
+        ))}
     </MapContainer>
   );
 };
