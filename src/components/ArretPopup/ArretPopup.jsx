@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Popup } from "react-leaflet";
+import { TicketShop } from "../Ticketshop";
+import { Link } from "react-router-dom";
 
 const ArretPopup = ({ nom, id_arret, position }) => {
   const [horaires, setHoraires] = useState([]);
+  const [showTicketShop, setShowTicketShop] = useState(false);
 
   useEffect(() => {
     const fetchHoraires = async () => {
@@ -43,6 +46,7 @@ const ArretPopup = ({ nom, id_arret, position }) => {
         ) : (
           <p>No horaires available.</p>
         )}
+        <Link to="/Ticketshop">Buy Ticket</Link>
       </div>
     </Popup>
   );

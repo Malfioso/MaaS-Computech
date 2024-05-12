@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Map } from "./components/Map";
 import { Navbar } from "./components/Navbar";
+import { TicketShop } from "./components/Ticketshop";
 import "./../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -13,13 +15,23 @@ function App() {
   }, [theme]);
 
   return (
-    <>
-      <div className={`cointainer ${theme}`}>
+    <Router>
+      <div className={`container ${theme}`}>
         <Navbar theme={theme} setTheme={setTheme} />
-        <h1>React Leaflet</h1>
-        {Map()}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <h1>React Leaflet</h1>
+                {Map()}
+              </>
+            }
+          />
+          <Route path="/Ticketshop" element={<TicketShop />} />
+        </Routes>
       </div>
-    </>
+    </Router>
   );
 }
 
